@@ -52,5 +52,39 @@ int main() {
         std::cout << "---\n";
     }
 
+    // Interactive address input loop
+    std::string userInput;
+    while (true) {
+        std::cout << "\nEnter address (or type 'exit' to quit): ";
+        std::getline(std::cin, userInput);
+        if (userInput == "exit") break;
+        std::string geoResult = converter.addressToGeo(userInput);
+        std::cout << "Converted coordinates: " << geoResult << std::endl;
+
+        // For demo, try to parse latitude and longitude from geoResult (assume format: "Latitude: xx, Longitude: yy")
+        double lat = 0.0, lon = 0.0;
+        size_t latPos = geoResult.find("Latitude:");
+        size_t lonPos = geoResult.find(", Longitude:");
+        if (latPos != std::string::npos && lonPos != std::string::npos) {
+            try {
+                lat = std::stod(geoResult.substr(latPos + 9, lonPos - (latPos + 9)));
+                lon = std::stod(geoResult.substr(lonPos + 12));
+            } catch (...) {
+                std::cout << "Could not parse coordinates from result." << std::endl;
+                continue;
+            }
+            auto features = shapeHandler.queryByCoordinate(lat, lon);
+            std::cout << "Additional info from Shapefile for coordinate (" << lat << ", " << lon << "):\n";
+            for (const auto& feature : features) {
+                std::cout << "Geometry: " << feature.geometryType << "\n";
+                for (const auto& attr : feature.attributes) {
+                    std::cout << attr.first << ": " << attr.second << "\n";
+                }
+                std::cout << "---\n";
+            }
+        } else {
+            std::cout << "Could not extract coordinates from geocoding result." << std::endl;
+        }
+    }
     return 0;
 }
