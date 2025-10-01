@@ -1,0 +1,5 @@
+/home/thanhpv/Documents/SourceCode/study/GeoShapeDemo/build/CMakeFiles/geocoder_demo.dir
+/home/thanhpv/Documents/SourceCode/study/GeoShapeDemo/build/CMakeFiles/edit_cache.dir
+/home/thanhpv/Documents/SourceCode/study/GeoShapeDemo/build/CMakeFiles/rebuild_cache.dir
+/home/thanhpv/Documents/SourceCode/study/GeoShapeDemo/build/_deps/nlohmann_json-build/CMakeFiles/edit_cache.dir
+/home/thanhpv/Documents/SourceCode/study/GeoShapeDemo/build/_deps/nlohmann_json-build/CMakeFiles/rebuild_cache.dir
