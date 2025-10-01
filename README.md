@@ -39,10 +39,14 @@ A C++ demo project for geocoding and querying additional information from Vietna
 ```
 
 ## How It Works
-1. Loads all `.shp` files in `data/gadm41_VNM_shp/`.
-2. Converts a sample Vietnam address to coordinates and vice versa.
-3. Queries the loaded Shapefiles for additional info about the location.
-4. Prints results with proper Unicode support.
+1. On startup, the demo loads all `.shp` files in `data/gadm41_VNM_shp/` for Vietnam region boundaries and attributes.
+2. It demonstrates geocoding by converting a sample Vietnam address (e.g., "Hanoi, Vietnam") to coordinates and vice versa, showing the results and related Shapefile info.
+3. After the initial demo, the program enters interactive mode:
+   - You can enter any address (in Vietnam) at the prompt.
+   - The program converts the address to coordinates, then queries all loaded Shapefiles for features containing that location.
+   - It prints the geocoding result and all additional information found in the Shapefiles (such as administrative boundaries, names, types, etc.).
+   - Type `exit` to quit the program.
+4. All output supports Unicode, so Vietnamese characters display correctly.
 
 ## Diagram
 ```mermaid
