@@ -36,64 +36,33 @@ std::vector<ShapeFeature> ShapeFileHandler::queryByCoordinate(double latitude, d
     return results;
 }
 
-                ShapeFileHandler::ShapeFileHandler() {
-                    GDALAllRegister();
-                }
+ShapeFileHandler::ShapeFileHandler() {
+    GDALAllRegister();
+}
 
-                ShapeFileHandler::~ShapeFileHandler() {
-                    close();
-                }
+ShapeFileHandler::~ShapeFileHandler() {
+    close();
+}
 
-                bool ShapeFileHandler::openAll(const std::vector<std::string>& filenames) {
-                    close();
-                    bool success = true;
-                    for (const auto& filename : filenames) {
-                        GDALDataset* ds = (GDALDataset*) GDALOpenEx(filename.c_str(), GDAL_OF_VECTOR, nullptr, nullptr, nullptr);
-                        if (ds) {
-                            datasets.push_back(ds);
-                        } else {
-                            success = false;
-                        }
-                    }
-                    return success;
-                }
-
-                std::vector<ShapeFeature> ShapeFileHandler::readAllFeatures() {
-                    std::vector<ShapeFeature> features;
-                    for (auto* dataset : datasets) {
-                        if (!dataset) continue;
-                        for (int i = 0; i < dataset->GetLayerCount(); ++i) {
-                            OGRLayer* layer = dataset->GetLayer(i);
-                            layer->ResetReading();
-                            OGRFeature* feature;
-                            while ((feature = layer->GetNextFeature()) != nullptr) {
-                                ShapeFeature sf;
-                                OGRGeometry* geom = feature->GetGeometryRef();
-                                if (geom) {
-                                    char* wkt = nullptr;
-                                    geom->exportToWkt(&wkt);
-                                    sf.geometryType = geom->getGeometryName();
-                                    sf.wkt = wkt ? wkt : "";
-                                    CPLFree(wkt);
-                                }
-                                for (int j = 0; j < feature->GetFieldCount(); ++j) {
-                                    OGRFieldDefn* fieldDef = feature->GetFieldDefnRef(j);
-                                    std::string name = fieldDef->GetNameRef();
-                                    std::string value = feature->IsFieldSet(j) ? feature->GetFieldAsString(j) : "";
-                                    sf.attributes.emplace_back(name, value);
-                                }
-                                features.push_back(sf);
-                                OGRFeature::DestroyFeature(feature);
-                            }
-                        }
-                    }
-                    return features;
-                }
+bool ShapeFileHandler::openAll(const std::vector<std::string>& filenames) {
+    close();
+    bool success = true;
+    for (const auto& filename : filenames) {
+        GDALDataset* ds = (GDALDataset*) GDALOpenEx(filename.c_str(), GDAL_OF_VECTOR, nullptr, nullptr, nullptr);
+        if (ds) {
+            datasets.push_back(ds);
+        } else {
+            success = false;
+        }
+    }
+    return success;
+}
 
 
-                void ShapeFileHandler::close() {
-                    for (auto* ds : datasets) {
-                        if (ds) GDALClose(ds);
-                    }
-                    datasets.clear();
-                }
+
+void ShapeFileHandler::close() {
+    for (auto* ds : datasets) {
+        if (ds) GDALClose(ds);
+    }
+    datasets.clear();
+}

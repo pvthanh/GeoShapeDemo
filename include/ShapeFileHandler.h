@@ -19,7 +19,6 @@ public:
     ~ShapeFileHandler();
     // Load multiple shapefiles
     bool openAll(const std::vector<std::string>& filenames);
-    std::vector<ShapeFeature> readAllFeatures();
     std::vector<ShapeFeature> queryByCoordinate(double latitude, double longitude);
     void close();
 private:
